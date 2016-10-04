@@ -93,7 +93,7 @@ class DB
 
 //    =======================================================================
 
-//-------------------------CREATE-----------------------
+//-------------------------CREATE----------------------- OK exept returning the id
     public function create($table, array $fields){
         $sql = "INSERT INTO `{$table}` (";
         $fieldKeys = array_keys($fields);
@@ -131,18 +131,55 @@ class DB
     //---------------------SELECT---------------------------
     //  SELECT users.name, users.lastname, tasks.name from users u  join tasks t on u.id t.user_id
     public function select(array $fields = null,array $tables,array $conditiones,array $limit = null,array $groups = null,array $havings = null,array $order = null ){
+        if(!isset($fields)){
+            $fields = ['*'];
+        }
+        $fields = implode(', ', $fields);
+        $sql    = "SELECT {$fields} ";
+        $sql   .= "FROM ";
+        $tables = implode(', ', $tables);
+        $sql   .= $tables.' ';
+        $sql   .= "WHERE ";
+        $conditiones = $this->prepareConditionArray($conditiones);
+        $sql   .= $conditiones;
+        echo "{$sql}<br>";
+        if(isset($fields)){
+            echo "Fields<br>";
+        }
+        if(isset($tables)){
+            echo "Tables<br>";
+        }
+        if(isset($conditiones)){
+            echo "Condition<br>";
+        }
+        if(isset($limit)){
+            echo "Limit<br>";
+        }
+        if(isset($groups)){
+            echo "Groups<br>";
+        }
+        if(isset($havings)){
+            echo "Havings<br>";
+        }
+         if(isset($order)){
+            echo "Orders<br>";
+        }
 
+    }
+    private function prepareConditionArray(array $array){
+        $reserved = ['=','>=','<=', '>', '<'];
+        return "The array";
     }
     //---------------------UPDATE---------------------------
     public function update(array $tables, array $values, array $conditiones){
 
     }
-    //---------------------DELETE---------------------------OK
+    //---------------------DELETE---------------------------OK all
     public function delete($table, array $conditions){
         $cond = '';
-        $cind_keys = array_keys($conditions);
+        $cond_keys = array_keys($conditions);
         $i = 1;
-        foreach ($cind_keys as $key){
+        foreach ($cond_keys as $key){
             if(is_array($conditions[$key])) {
                 $cond .= $this->convertDeleteArrayToString($conditions[$key]);
                 if ($i < count($conditions)) {
