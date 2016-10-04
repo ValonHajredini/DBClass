@@ -11,16 +11,20 @@ class DB
     private $HOST        = "localhost";
     private $USER        = 'root';
     private $PASSWORD    = '';
-    protected $DATABASE    = 'firstproject';
+    protected $DATABASE    = 'mydb';
     private static $_dbIns   = null;
     private $_pdo;
     private $_query;
+    private $_inserted_id;
+    private $_results;
+    private $_count;
     private function __construct(){
         try {
             $this->_pdo = new PDO('mysql:host=' . $this->HOST . ';dbname=' . $this->DATABASE . '', $this->USER, $this->PASSWORD);
         } catch (PDOException $e){
             throw new Exception('something is wrong with database connection');
             die($e->getMessage());
+
         }
     }
     public static function getIns(){
@@ -31,16 +35,44 @@ class DB
     }
     //    =======================================================================
     public function query($sql, $params = []){
-        $this->_error = false;
-        if ($this->_query = $this->_pdo->prepare($sql)){
-            if ($this->_query->execute()){
-                $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
-                $this->_count = $this->_query->rowCount();
-            } else {
-                $this->_error = true;
+
+        try {
+            $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->_query = $this->_pdo->prepare($sql);
+            $x = 1;
+            if(count($params)){
+                foreach ($params as $param){
+                    $this->_query->bindValue($x, $param);
+                    $x++;
+                }
             }
+
+            try {
+                $this->_pdo->beginTransaction();
+                if ($this->_query->execute()){
+
+                } else {
+                    $this->_query->execute();
+                }
+                $this->_pdo->commit();
+                $this->_inserted_id = $this->_pdo->lastInsertId();
+                $this->_inserted_id = $this->_inserted_id;
+            } catch(PDOExecption $e) {
+                throw new Exception('Error on COMMIT');
+                $this->_pdo->rollback();
+
+            }catch(PDOExecption $e) {
+                $this->_pdo->rollback();
+                throw new Exception('Error in ROLLBACK');
+                die($e->getMessage());
+            }
+
+        } catch( PDOExecption $e ) {
+
+            throw new Exception('Errorwith PREPARING the query');
+            die($e->getMessage());
         }
-        return $this;
+        return true;
     }
     public function action($action, $table, $where = []){
         if (count($where) === 3){
@@ -62,10 +94,42 @@ class DB
 //    =======================================================================
 
 //-------------------------CREATE-----------------------
-    public function create($table, $fields = []){
+    public function create($table, array $fields){
+        $sql = "INSERT INTO `{$table}` (";
+        $fieldKeys = array_keys($fields);
+        $k = 1;
+        foreach ($fieldKeys as $key){
+            $sql .= $key;
+            if($k < count($fieldKeys)){
+                $sql .= ', ';
+            }else if($k == count($fieldKeys)){
+                $sql .= ') ';
+            }
+            $k++;
+        }
+        $sql .= " VALUES( ";
+        $v = 1;
+        foreach ($fields as $key => $value){
+                $sql .=  '?' ;
 
+            if ($v < count($fields)){
+                $sql .= ', ';
+            }
+            $v++;
+        }
+        $sql .= ')';
+//        $fields = implode(', ', $fields);
+
+        try{
+            $this->query($sql, $fields );
+        } catch (PDOException $e){
+            throw new Exception('The create query is not ok[ '.$sql.' ]');
+            die($e->getMessage());
+        }
+        print_r($this->results());
     }
     //---------------------SELECT---------------------------
+    //  SELECT users.name, users.lastname, tasks.name from users u  join tasks t on u.id t.user_id
     public function select(array $fields = null,array $tables,array $conditiones,array $limit = null,array $groups = null,array $havings = null,array $order = null ){
 
     }
@@ -73,31 +137,58 @@ class DB
     public function update(array $tables, array $values, array $conditiones){
 
     }
-    //---------------------DELETE---------------------------
+    //---------------------DELETE---------------------------OK
     public function delete($table, array $conditions){
         $cond = '';
         $cind_keys = array_keys($conditions);
         $i = 1;
         foreach ($cind_keys as $key){
-
-            $cond .= $this->convertArrayToString($conditions[$key]);
-            if($i < count($conditions)){
-                $cond .= ' AND ';
+            if(is_array($conditions[$key])) {
+                $cond .= $this->convertDeleteArrayToString($conditions[$key]);
+                if ($i < count($conditions)) {
+                    $cond .= ' AND ';
+                }
+            }else {
+                $cond .= $conditions[$key];
             }
             $i++;
         }
-        echo $sql = "DELETE FROM `{$table}` WHERE ". $cond;
+        echo  $sql = "DELETE FROM `{$table}` WHERE ". $cond;
+        try{
+            $this->query($sql);
+        } catch (PDOException $e){
+            throw new Exception('The DELETE query is not ok [ '.$sql.' ]');
+            die($e->getMessage());
+        }
 
     }
-    private function convertArrayToString($array){
-        $reserved = ['=','>=','<='];
+    private function convertDeleteArrayToString($array){
+        $reserved = ['=','>=','<=', '>', '<'];
         $result = '';
-
+        $i = 1;
         foreach ($array as $key => $value){
-            $result .= ' '.$value.' ';
+            if (in_array($value, $reserved)){
+                $result .= ' '.$value.' ';
+            }else if (is_integer($value) ){
+            $result .= " ".$value." " ;
+            }else if($value == $array[0]){
+                $result .= " ".$value." " ;
+            }else {
+                $result .= " '".$value."' " ;
+            }
         }
 
         return $result;
     }
+    public function lastInsertedRow(){
+        return $this->_inserted_id;
+    }
+    public function results(){
+        return $this->_results;
+    }
+    public function count(){
+        return $this->_count;
+    }
+//    public function lastInsertedRow
     //------------------------------------------------
 }
