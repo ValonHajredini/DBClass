@@ -134,13 +134,6 @@ class Database{
     public function query($sql, $params = []){
         $this->_error = false;
         if ($this->_query = $this->_pdo->prepare($sql)){
-            $i = 1;
-            if(count($params)){
-                foreach ($params as $param){
-                    $this->_query->bindValue($i, $param);
-                    $i++;
-                }
-            }
             if ($this->_query->execute()){
                 $this->_results = $this->_query->fetchAll(PDO::FETCH_OBJ);
                 $this->_count = $this->_query->rowCount();
