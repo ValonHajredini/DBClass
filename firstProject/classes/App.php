@@ -81,34 +81,40 @@ $table = ['users', 'tasks'];
 //echo "Array 5<br>";
 //echo convertDeleteArrayToString($array5, $table);
 //echo "<br>";
-function parsingCondition($arrays, array $table = []){
-    $reserved = ['=','>=','<=', '>', '<', '!='];
-    $result = '';
-    $i = 1;
-    if($table == null) {
-        $table = [];
-    }
-    foreach ($arrays as $key =>  $array){
-        if(is_string($key)){
-            $result .= " {$key} ";
-        }
-        foreach ($array as $value){
-            $valueArray = explode('.',$value);
-            if (in_array($value, $reserved)){
-                $result .= ' '.$value.' ';
-            }else if (is_integer($value) ){
-                $result .= " ".$value." " ;
-            }else if($value == $array[0]){
-                $result .= " ".$value." " ;
-            } else if (in_array($valueArray[0], $table)){
-                $result .= " ".$value." " ;
-            } else{
-                $result .= " '".$value."' " ;
-            }
-        }
-    }
-
-    return $result;
-}
-$array1  =[["users.a",'=','b'],"AND" => ["a",'=','b'],"OR" => ["a",'=',11],"XOR"=>["users.a",'=',11],"ON" => ["users.a",'=','tasks.a']];
-echo parsingCondition($array1, $table);
+//function parsingCondition($arrays, array $table = []){
+//    $reserved = ['=','>=','<=', '>', '<', '!='];
+//    $result = '';
+//    $i = 1;
+//    if($table == null) {
+//        $table = [];
+//    }
+//    foreach ($arrays as $key =>  $array){
+//        if(is_string($key)){
+//            $result .= " {$key} ";
+//        }
+//        foreach ($array as $value){
+//            $valueArray = explode('.',$value);
+//            if (in_array($value, $reserved)){
+//                $result .= ' '.$value.' ';
+//            }else if (is_integer($value) ){
+//                $result .= " ".$value." " ;
+//            }else if($value == $array[0]){
+//                $result .= " ".$value." " ;
+//            } else if (in_array($valueArray[0], $table)){
+//                $result .= " ".$value." " ;
+//            } else{
+//                $result .= " '".$value."' " ;
+//            }
+//        }
+//    }
+//
+//    return $result;
+//}
+//$array1  =[["users.a",'=','b'],"AND" => ["a",'=','b'],"OR" => ["a",'=',11],"XOR"=>["users.a",'=',11],"ON" => ["users.a",'=','tasks.a']];
+//echo parsingCondition($array1, $table);
+//private function countSelected(array $count){
+//    $return     = ", COUNT( ";
+//    $return     .= " {$count['BY']} ) ";
+//    $return     .= "AS  {$count["AS"]}";
+//    return $return;
+//}

@@ -5,7 +5,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/firstProject/classes/App.php" afterPath="$PROJECT_DIR$/firstProject/classes/App.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/firstProject/classes/DB.php" afterPath="$PROJECT_DIR$/firstProject/classes/DB.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/firstProject/index.php" afterPath="$PROJECT_DIR$/firstProject/index.php" />
     </list>
     <ignored path="FirstProject.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,19 +28,16 @@
       <file leaf-file-name="DB.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/firstProject/classes/DB.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="157" column="5" selection-start-line="157" selection-start-column="5" selection-end-line="157" selection-end-column="5" />
+            <state relative-caret-position="251">
+              <caret line="220" column="31" selection-start-line="220" selection-start-column="31" selection-end-line="220" selection-end-column="31" />
               <folding>
                 <element signature="n#query#0;n#DB#0;n#!!top" expanded="false" />
                 <element signature="n#create#0;n#DB#0;n#!!top" expanded="false" />
                 <element signature="n#groupBy#0;n#DB#0;n#!!top" expanded="false" />
                 <element signature="n#selectedTables#0;n#DB#0;n#!!top" expanded="false" />
                 <element signature="n#orderBy#0;n#DB#0;n#!!top" expanded="false" />
-                <element signature="n#countSelected#0;n#DB#0;n#!!top" expanded="false" />
-                <element signature="n#parsingCondition#0;n#DB#0;n#!!top" expanded="false" />
-                <marker date="1475711068449" expanded="true" signature="2452:2476" ph="INSERT INTO `${{$table}}`... " />
-                <marker date="1475711068449" expanded="false" signature="6865:7202" ph="..." />
-                <marker date="1475711068449" expanded="true" signature="6957:6986" ph="DELETE FROM " />
+                <marker date="1475711504247" expanded="true" signature="2452:2476" ph="INSERT INTO `${{$table}}`... " />
+                <marker date="1475711504247" expanded="true" signature="6759:6788" ph="DELETE FROM " />
               </folding>
             </state>
           </provider>
@@ -50,11 +46,9 @@
       <file leaf-file-name="App.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/firstProject/classes/App.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="535">
-              <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="111" selection-end-column="1" />
-              <folding>
-                <element signature="n#parsingCondition#0;n#!!top" expanded="false" />
-              </folding>
+            <state relative-caret-position="277">
+              <caret line="112" column="57" selection-start-line="112" selection-start-column="57" selection-end-line="112" selection-end-column="57" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -80,8 +74,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/firstProject/classes/App.php" />
         <option value="$PROJECT_DIR$/firstProject/index.php" />
+        <option value="$PROJECT_DIR$/firstProject/classes/App.php" />
         <option value="$PROJECT_DIR$/firstProject/classes/DB.php" />
       </list>
     </option>
@@ -243,15 +237,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1475598053195</updated>
-      <workItem from="1475598054821" duration="31586000" />
+      <workItem from="1475598054821" duration="32020000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31586000" />
+    <option name="totallyTimeSpent" value="32020000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="7" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -260,7 +254,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32898173" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32898173" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -309,16 +303,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/firstProject/classes/App.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="535">
-          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="111" selection-end-column="1" />
-          <folding>
-            <element signature="n#parsingCondition#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/firstProject/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
@@ -330,21 +314,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/firstProject/classes/App.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="112" column="57" selection-start-line="112" selection-start-column="57" selection-end-line="112" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/firstProject/classes/DB.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="157" column="5" selection-start-line="157" selection-start-column="5" selection-end-line="157" selection-end-column="5" />
+        <state relative-caret-position="251">
+          <caret line="220" column="31" selection-start-line="220" selection-start-column="31" selection-end-line="220" selection-end-column="31" />
           <folding>
             <element signature="n#query#0;n#DB#0;n#!!top" expanded="false" />
             <element signature="n#create#0;n#DB#0;n#!!top" expanded="false" />
             <element signature="n#groupBy#0;n#DB#0;n#!!top" expanded="false" />
             <element signature="n#selectedTables#0;n#DB#0;n#!!top" expanded="false" />
             <element signature="n#orderBy#0;n#DB#0;n#!!top" expanded="false" />
-            <element signature="n#countSelected#0;n#DB#0;n#!!top" expanded="false" />
-            <element signature="n#parsingCondition#0;n#DB#0;n#!!top" expanded="false" />
-            <marker date="1475711068449" expanded="true" signature="2452:2476" ph="INSERT INTO `${{$table}}`... " />
-            <marker date="1475711068449" expanded="false" signature="6865:7202" ph="..." />
-            <marker date="1475711068449" expanded="true" signature="6957:6986" ph="DELETE FROM " />
+            <marker date="1475711504247" expanded="true" signature="2452:2476" ph="INSERT INTO `${{$table}}`... " />
+            <marker date="1475711504247" expanded="true" signature="6759:6788" ph="DELETE FROM " />
           </folding>
         </state>
       </provider>

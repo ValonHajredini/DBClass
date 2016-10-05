@@ -207,12 +207,6 @@ class DB
         }
         return $result;
     }
-    private function countSelected(array $count){
-        $return     = ", COUNT( ";
-        $return     .= " {$count['BY']} ) ";
-        $return     .= "AS  {$count["AS"]}";
-        return $return;
-    }
     //---------------------UPDATE---------------------------
     public function update(array $tables, array $values, array $conditiones){
 
@@ -220,7 +214,7 @@ class DB
     //---------------------DELETE---------------------------OK all
     public function delete($table, array $conditions){
         $cond = '';
-        $cond .= parsingCondition($conditions);
+        $cond .= $this->parsingCondition($conditions);
 
         echo  $sql = "DELETE FROM `{$table}` WHERE ". $cond;
         try{
@@ -241,10 +235,10 @@ class DB
         return $this->_count;
     }
     //------------------------------------------------
-    function parsingCondition($arrays, array $table = []){
+    private function parsingCondition($arrays, array $table = []){
         $reserved = ['=','>=','<=', '>', '<', '!='];
         $result = '';
-        $i = 1;
+
         if($table == null) {
             $table = [];
         }
