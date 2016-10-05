@@ -11,7 +11,7 @@ class DB
     private $HOST        = "localhost";
     private $USER        = 'root';
     private $PASSWORD    = '';
-    protected $DATABASE    = 'testdb';
+    protected $DATABASE    = 'mydb';
     private static $_dbIns   = null;
     private $_pdo;
     private $_query;
@@ -49,7 +49,9 @@ class DB
                 $this->_pdo->beginTransaction();
                 if ($this->_query->execute()){
                     $this->_results = $this->_query;
-                    $this->_pdo->commit();
+                    if ($this->_pdo->commit()){
+                        $this->_inserted_id = $this->_pdo->lastInsertId();
+                    }
 
                 }
             } catch(PDOExecption $e) {
@@ -61,7 +63,7 @@ class DB
                 throw new Exception('Error in ROLLBACK');
                 die($e->getMessage());
             }
-            $this->_inserted_id = $this->_pdo->lastInsertId('id');
+
 
         } catch( PDOExecption $e ) {
 
@@ -70,23 +72,6 @@ class DB
         }
         return true;
     }
-    public function action($action, $table, $where = []){
-        if (count($where) === 3){
-            $operators = ['=', '>', '<', '>=', '<='];
-            $field      = $where[0];
-            $operator   = $where[1];
-            $value      = $where[2];
-
-            if(in_array($operator, $operators)){
-                $sql = "{$action} FROM {$table} WHERE {$field}  {$operator}?";
-                if(!$this->query($sql, [$value])->error()){
-                    return $this;
-                }
-            }
-        }
-        return false;
-    }
-
 //    =======================================================================
 
 //-------------------------CREATE----------------------- OK exept returning the id
@@ -116,7 +101,7 @@ class DB
         $sql .= ')';
 //        $fields = implode(', ', $fields);
         echo $sql;
-        print_r($fields);
+//        print_r($fields);
         try{
             $this->query($sql, $fields );
         } catch (PDOException $e){
@@ -124,7 +109,7 @@ class DB
             die($e->getMessage());
         }
 //        print_r($this->results());
-        echo  $this->lastInsertedRow();
+//        echo  $this->lastInsertedRow();
     }
     //---------------------SELECT---------------------------
     public function select(array $fields = null,array $tables,array $conditiones = null, array $limit = null,array $groups = null,array $havings = null,array $order = null){
@@ -148,7 +133,7 @@ class DB
             $groups = "";
         }
         if ($conditiones != null){
-            $conditiones = $this->prepareConditionArray($conditiones, $tables);
+            $conditiones = $this->parsingCondition($conditiones, $tables);
         }
         else {
             $conditiones  = '';
@@ -157,62 +142,18 @@ class DB
         $sql    = "SELECT {$fields} ";
         $tables = $this->selectedTables($tables);
         $sql .= " ".$tables." ";
-
         $sql   .= $conditiones.' ';
         $sql .= " ".$groups." ";
         $sql .= " ".$order." ";
         $sql .= ' '.$limit.' ';
-        echo "{$sql}<br>";
+        echo "{$sql}";
         try{
             $this->query($sql);
-            return $this->results();
+//            return $this->results();
         }catch (PDOException $e){
             throw new Exception('something is wrong with SELECT QUERY');
             die($e->getMessage());
 
-        }
-    }
-    private function prepareConditionArray(array $condtition,array  $tables){
-        $reserved = ['ON', 'INNER JOIN', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FROM'];
-        $in_row = false;
-        $tables_keys = array_keys($tables);
-        foreach ($tables_keys as $tbRow){
-            if (in_array($tbRow, $reserved)){
-                $in_row = true;
-            }
-        }
-        if ($in_row === true){
-            $results = "ON ";
-        }else {
-            $results = "WHERE ";
-        }
-        $i = 1;
-        foreach ($condtition as $condition){
-            if ($i  == 1 ){
-                $results .= " ";
-            }else {
-                $results .= " AND ";
-
-            }
-//            $results .= implode(' ', $condition);
-            foreach ($condition as $params){
-                $results .= $this->parseValue($params, $tables);
-            }
-            $i++;
-        }
-        return $results;
-    }
-    private function parseValue($value, array $table){
-        $reserved = ['=','>=','<=', '>', '<', '!='];
-        $valueArray = explode('.',$value);
-        if (in_array($valueArray[0], $table)){
-            return $value;
-        }else if(in_array($valueArray[0], $reserved)){
-            return $value;
-        }else if(is_numeric($valueArray[0])){
-            return $value;
-        }else {
-            return " '".$value."' ";
         }
     }
     private function groupBy(array $groupes){
@@ -279,19 +220,8 @@ class DB
     //---------------------DELETE---------------------------OK all
     public function delete($table, array $conditions){
         $cond = '';
-        $cond_keys = array_keys($conditions);
-        $i = 1;
-        foreach ($cond_keys as $key){
-            if(is_array($conditions[$key])) {
-                $cond .= $this->convertDeleteArrayToString($conditions[$key]);
-                if ($i < count($conditions)) {
-                    $cond .= ' AND ';
-                }
-            }else {
-                $cond .= $conditions[$key];
-            }
-            $i++;
-        }
+        $cond .= parsingCondition($conditions);
+
         echo  $sql = "DELETE FROM `{$table}` WHERE ". $cond;
         try{
             $this->query($sql);
@@ -300,24 +230,6 @@ class DB
             die($e->getMessage());
         }
 
-    }
-    private function convertDeleteArrayToString($array){
-        $reserved = ['=','>=','<=', '>', '<'];
-        $result = '';
-        $i = 1;
-        foreach ($array as $key => $value){
-            if (in_array($value, $reserved)){
-                $result .= ' '.$value.' ';
-            }else if (is_integer($value) ){
-            $result .= " ".$value." " ;
-            }else if($value == $array[0]){
-                $result .= " ".$value." " ;
-            }else {
-                $result .= " '".$value."' " ;
-            }
-        }
-
-        return $result;
     }
     public function lastInsertedRow(){
         return $this->_inserted_id;
@@ -329,4 +241,33 @@ class DB
         return $this->_count;
     }
     //------------------------------------------------
+    function parsingCondition($arrays, array $table = []){
+        $reserved = ['=','>=','<=', '>', '<', '!='];
+        $result = '';
+        $i = 1;
+        if($table == null) {
+            $table = [];
+        }
+        foreach ($arrays as $key =>  $array){
+            if(is_string($key)){
+                $result .= " {$key} ";
+            }
+            foreach ($array as $value){
+                $valueArray = explode('.',$value);
+                if (in_array($value, $reserved)){
+                    $result .= ' '.$value.' ';
+                }else if (is_integer($value) ){
+                    $result .= " ".$value." " ;
+                }else if($value == $array[0]){
+                    $result .= " ".$value." " ;
+                } else if (in_array($valueArray[0], $table)){
+                    $result .= " ".$value." " ;
+                } else{
+                    $result .= " '".$value."' " ;
+                }
+            }
+        }
+
+        return $result;
+    }
 }

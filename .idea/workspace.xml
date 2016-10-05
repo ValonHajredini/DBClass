@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d3ab564b-77ee-4014-9b20-cd81bf6d7519" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/firstProject/classes/App.php" afterPath="$PROJECT_DIR$/firstProject/classes/App.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/firstProject/classes/DB.php" afterPath="$PROJECT_DIR$/firstProject/classes/DB.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/firstProject/index.php" afterPath="$PROJECT_DIR$/firstProject/index.php" />
     </list>
@@ -23,55 +25,54 @@
     <favorites_list name="FirstProject" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.334375">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/firstProject/index.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="100">
-                  <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Database.php" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/firstProject/classes/Database.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="280">
-                  <caret line="159" column="21" selection-start-line="159" selection-start-column="21" selection-end-line="159" selection-end-column="21" />
-                  <folding>
-                    <marker date="1475597974871" expanded="true" signature="1303:1372" ph="INSERT INTO $... " />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="DB.php" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/firstProject/classes/DB.php">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="335">
-                  <caret line="169" column="46" selection-start-line="169" selection-start-column="46" selection-end-line="169" selection-end-column="46" />
-                  <folding>
-                    <element signature="n#create#0;n#DB#0;n#!!top" expanded="false" />
-                    <element signature="n#delete#0;n#DB#0;n#!!top" expanded="false" />
-                    <element signature="n#convertDeleteArrayToString#0;n#DB#0;n#!!top" expanded="false" />
-                    <marker date="1475619222882" expanded="true" signature="3042:3063" ph="INSERT INTO " />
-                    <marker date="1475619222882" expanded="true" signature="3042:3066" ph="INSERT INTO `${{$table}}`... " />
-                    <marker date="1475619222882" expanded="true" signature="6040:6069" ph="DELETE FROM " />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="DB.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/firstProject/classes/DB.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="455">
+              <caret line="157" column="5" selection-start-line="157" selection-start-column="5" selection-end-line="157" selection-end-column="5" />
+              <folding>
+                <element signature="n#query#0;n#DB#0;n#!!top" expanded="false" />
+                <element signature="n#create#0;n#DB#0;n#!!top" expanded="false" />
+                <element signature="n#groupBy#0;n#DB#0;n#!!top" expanded="false" />
+                <element signature="n#selectedTables#0;n#DB#0;n#!!top" expanded="false" />
+                <element signature="n#orderBy#0;n#DB#0;n#!!top" expanded="false" />
+                <element signature="n#countSelected#0;n#DB#0;n#!!top" expanded="false" />
+                <element signature="n#parsingCondition#0;n#DB#0;n#!!top" expanded="false" />
+                <marker date="1475711068449" expanded="true" signature="2452:2476" ph="INSERT INTO `${{$table}}`... " />
+                <marker date="1475711068449" expanded="false" signature="6865:7202" ph="..." />
+                <marker date="1475711068449" expanded="true" signature="6957:6986" ph="DELETE FROM " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="App.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/firstProject/classes/App.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="535">
+              <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="111" selection-end-column="1" />
+              <folding>
+                <element signature="n#parsingCondition#0;n#!!top" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/firstProject/index.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="380">
+              <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="49" selection-end-column="2" />
+              <folding>
+                <element signature="e#1962#2261#0#PHP" expanded="false" />
+                <marker date="1475711057232" expanded="true" signature="2538:2589" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -79,8 +80,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/firstProject/classes/DB.php" />
+        <option value="$PROJECT_DIR$/firstProject/classes/App.php" />
         <option value="$PROJECT_DIR$/firstProject/index.php" />
+        <option value="$PROJECT_DIR$/firstProject/classes/DB.php" />
       </list>
     </option>
   </component>
@@ -126,7 +128,56 @@
     </navigator>
     <panes>
       <pane id="ProjectPane">
-        <subPane />
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FirstProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FirstProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FirstProject" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FirstProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FirstProject" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="firstProject" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FirstProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="FirstProject" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="firstProject" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="classes" />
+              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
       </pane>
       <pane id="Scratches" />
       <pane id="Scope" />
@@ -192,18 +243,18 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1475598053195</updated>
-      <workItem from="1475598054821" duration="16860000" />
+      <workItem from="1475598054821" duration="31586000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16860000" />
+    <option name="totallyTimeSpent" value="31586000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -235,7 +286,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -258,26 +309,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/firstProject/classes/DB.php">
+    <entry file="file://$PROJECT_DIR$/firstProject/classes/App.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="335">
-          <caret line="169" column="46" selection-start-line="169" selection-start-column="46" selection-end-line="169" selection-end-column="46" />
+        <state relative-caret-position="535">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="111" selection-end-column="1" />
           <folding>
-            <element signature="n#create#0;n#DB#0;n#!!top" expanded="false" />
-            <element signature="n#delete#0;n#DB#0;n#!!top" expanded="false" />
-            <element signature="n#convertDeleteArrayToString#0;n#DB#0;n#!!top" expanded="false" />
-            <marker date="1475619222882" expanded="true" signature="3042:3063" ph="INSERT INTO " />
-            <marker date="1475619222882" expanded="true" signature="3042:3066" ph="INSERT INTO `${{$table}}`... " />
-            <marker date="1475619222882" expanded="true" signature="6040:6069" ph="DELETE FROM " />
+            <element signature="n#parsingCondition#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/firstProject/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
-          <folding />
+        <state relative-caret-position="380">
+          <caret line="46" column="0" selection-start-line="46" selection-start-column="0" selection-end-line="49" selection-end-column="2" />
+          <folding>
+            <element signature="e#1962#2261#0#PHP" expanded="false" />
+            <marker date="1475711057232" expanded="true" signature="2538:2589" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/firstProject/classes/DB.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="455">
+          <caret line="157" column="5" selection-start-line="157" selection-start-column="5" selection-end-line="157" selection-end-column="5" />
+          <folding>
+            <element signature="n#query#0;n#DB#0;n#!!top" expanded="false" />
+            <element signature="n#create#0;n#DB#0;n#!!top" expanded="false" />
+            <element signature="n#groupBy#0;n#DB#0;n#!!top" expanded="false" />
+            <element signature="n#selectedTables#0;n#DB#0;n#!!top" expanded="false" />
+            <element signature="n#orderBy#0;n#DB#0;n#!!top" expanded="false" />
+            <element signature="n#countSelected#0;n#DB#0;n#!!top" expanded="false" />
+            <element signature="n#parsingCondition#0;n#DB#0;n#!!top" expanded="false" />
+            <marker date="1475711068449" expanded="true" signature="2452:2476" ph="INSERT INTO `${{$table}}`... " />
+            <marker date="1475711068449" expanded="false" signature="6865:7202" ph="..." />
+            <marker date="1475711068449" expanded="true" signature="6957:6986" ph="DELETE FROM " />
+          </folding>
         </state>
       </provider>
     </entry>
