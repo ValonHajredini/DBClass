@@ -11,7 +11,7 @@ class DB
     private $HOST        = "localhost";
     private $USER        = 'root';
     private $PASSWORD    = '';
-    protected $DATABASE    = 'mydb';
+    protected $DATABASE    = 'testdb';
     private static $_dbIns   = null;
     private $_pdo;
     private $_query;
@@ -35,7 +35,6 @@ class DB
     }
     //    =======================================================================
     public function query($sql, $params = []){
-
         try {
             $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_query = $this->_pdo->prepare($sql);
@@ -46,17 +45,13 @@ class DB
                     $x++;
                 }
             }
-
             try {
                 $this->_pdo->beginTransaction();
                 if ($this->_query->execute()){
+                    $this->_results = $this->_query;
+                    $this->_pdo->commit();
 
-                } else {
-                    $this->_query->execute();
                 }
-                $this->_pdo->commit();
-                $this->_inserted_id = $this->_pdo->lastInsertId();
-                $this->_inserted_id = $this->_inserted_id;
             } catch(PDOExecption $e) {
                 throw new Exception('Error on COMMIT');
                 $this->_pdo->rollback();
@@ -66,6 +61,7 @@ class DB
                 throw new Exception('Error in ROLLBACK');
                 die($e->getMessage());
             }
+            $this->_inserted_id = $this->_pdo->lastInsertId('id');
 
         } catch( PDOExecption $e ) {
 
@@ -119,56 +115,162 @@ class DB
         }
         $sql .= ')';
 //        $fields = implode(', ', $fields);
-
+        echo $sql;
+        print_r($fields);
         try{
             $this->query($sql, $fields );
         } catch (PDOException $e){
             throw new Exception('The create query is not ok[ '.$sql.' ]');
             die($e->getMessage());
         }
-        print_r($this->results());
+//        print_r($this->results());
+        echo  $this->lastInsertedRow();
     }
     //---------------------SELECT---------------------------
-    //  SELECT users.name, users.lastname, tasks.name from users u  join tasks t on u.id t.user_id
-    public function select(array $fields = null,array $tables,array $conditiones,array $limit = null,array $groups = null,array $havings = null,array $order = null ){
+    public function select(array $fields = null,array $tables,array $conditiones = null, array $limit = null,array $groups = null,array $havings = null,array $order = null){
         if(!isset($fields)){
             $fields = ['*'];
         }
+
+        if ($order != null){
+            $order = $this->orderBy($order);
+        }else {
+            $order = "";
+        }
+        if ($limit != null){
+            $limit = "LIMIT ". implode(', ',$limit);
+        }else {
+            $limit = " ";
+        }
+        if ($groups != null){
+            $groups = $this->groupBy($groups);
+        }else {
+            $groups = "";
+        }
+        if ($conditiones != null){
+            $conditiones = $this->prepareConditionArray($conditiones, $tables);
+        }
+        else {
+            $conditiones  = '';
+        }
         $fields = implode(', ', $fields);
         $sql    = "SELECT {$fields} ";
-        $sql   .= "FROM ";
-        $tables = implode(', ', $tables);
-        $sql   .= $tables.' ';
-        $sql   .= "WHERE ";
-        $conditiones = $this->prepareConditionArray($conditiones);
-        $sql   .= $conditiones;
-        echo "{$sql}<br>";
-        if(isset($fields)){
-            echo "Fields<br>";
-        }
-        if(isset($tables)){
-            echo "Tables<br>";
-        }
-        if(isset($conditiones)){
-            echo "Condition<br>";
-        }
-        if(isset($limit)){
-            echo "Limit<br>";
-        }
-        if(isset($groups)){
-            echo "Groups<br>";
-        }
-        if(isset($havings)){
-            echo "Havings<br>";
-        }
-         if(isset($order)){
-            echo "Orders<br>";
-        }
+        $tables = $this->selectedTables($tables);
+        $sql .= " ".$tables." ";
 
+        $sql   .= $conditiones.' ';
+        $sql .= " ".$groups." ";
+        $sql .= " ".$order." ";
+        $sql .= ' '.$limit.' ';
+        echo "{$sql}<br>";
+        try{
+            $this->query($sql);
+            return $this->results();
+        }catch (PDOException $e){
+            throw new Exception('something is wrong with SELECT QUERY');
+            die($e->getMessage());
+
+        }
     }
-    private function prepareConditionArray(array $array){
-        $reserved = ['=','>=','<=', '>', '<'];
-        return "The array";
+    private function prepareConditionArray(array $condtition,array  $tables){
+        $reserved = ['ON', 'INNER JOIN', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FROM'];
+        $in_row = false;
+        $tables_keys = array_keys($tables);
+        foreach ($tables_keys as $tbRow){
+            if (in_array($tbRow, $reserved)){
+                $in_row = true;
+            }
+        }
+        if ($in_row === true){
+            $results = "ON ";
+        }else {
+            $results = "WHERE ";
+        }
+        $i = 1;
+        foreach ($condtition as $condition){
+            if ($i  == 1 ){
+                $results .= " ";
+            }else {
+                $results .= " AND ";
+
+            }
+//            $results .= implode(' ', $condition);
+            foreach ($condition as $params){
+                $results .= $this->parseValue($params, $tables);
+            }
+            $i++;
+        }
+        return $results;
+    }
+    private function parseValue($value, array $table){
+        $reserved = ['=','>=','<=', '>', '<', '!='];
+        $valueArray = explode('.',$value);
+        if (in_array($valueArray[0], $table)){
+            return $value;
+        }else if(in_array($valueArray[0], $reserved)){
+            return $value;
+        }else if(is_numeric($valueArray[0])){
+            return $value;
+        }else {
+            return " '".$value."' ";
+        }
+    }
+    private function groupBy(array $groupes){
+        $return = " GROUP BY ";
+        $i = 1;
+        foreach($groupes as $group){
+            $return .= " ".$group." ";
+            if ($i< count($groupes)){
+                $return .= ", ";
+            }
+            $i++;
+        }
+        return $return;
+    }
+    private function selectedTables(array $tables){
+        if (!empty($tables)){
+            $reserved = ['ON', 'INNER JOIN', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FROM'];
+            $result = " ";
+            $keysOfTables = array_keys($tables);
+            if (array_key_exists('FROM', $tables) or array_key_exists('from', $tables)){
+                $result .= "";
+                }else {
+                $result .= " FROM";
+
+            }
+            $arr = null;
+            $i = 1;
+            foreach ($tables as $key => $value){
+                $key = strtoupper($key);
+                if(in_array($key, $reserved )){
+                  $arr = array_search($key, $reserved);
+                    $result .= " {$reserved[$arr]} {$value} ";
+                } else {
+                    $result .= " {$value} ";
+                }
+            }
+            return $result;
+
+
+        }
+    }
+    private function orderBy(array $order){
+        $result = "ORDER BY ";
+        $i = 1;
+        foreach ( $order as $key => $value){
+            $result .= ' '.$key.' '. $value.' ';
+            if ($i < count($order)){
+                $result .= ', ';
+            }
+            $i++;
+        }
+        return $result;
+    }
+    private function countSelected(array $count){
+        $return     = ", COUNT( ";
+        $return     .= " {$count['BY']} ) ";
+        $return     .= "AS  {$count["AS"]}";
+        return $return;
     }
     //---------------------UPDATE---------------------------
     public function update(array $tables, array $values, array $conditiones){
@@ -226,6 +328,5 @@ class DB
     public function count(){
         return $this->_count;
     }
-//    public function lastInsertedRow
     //------------------------------------------------
 }
