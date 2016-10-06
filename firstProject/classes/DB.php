@@ -8,19 +8,27 @@
  */
 class DB
 {
+//    ==============================[ CORE VARIABLES ]==================================
+
     private $HOST        = "localhost";
     private $USER        = 'root';
     private $PASSWORD    = '';
-    protected $DATABASE    = 'mydb';
+    protected $DATABASE    = 'testdb';
     private static $_dbIns   = null;
     private $_pdo;
     private $_query;
     private $_inserted_id;
     private $_results;
     private $_count;
-    private function __construct(){
+    private $_affected_row;
+
+
+    //==============================[ CORE METHODS ]====================================
+    public function __construct(){
         try {
-            $this->_pdo = new PDO('mysql:host=' . $this->HOST . ';dbname=' . $this->DATABASE . '', $this->USER, $this->PASSWORD);
+            if(!isset($this->_pdo )){
+                $this->_pdo = new PDO('mysql:host=' . $this->HOST . ';dbname=' . $this->DATABASE . '', $this->USER, $this->PASSWORD);
+            }
         } catch (PDOException $e){
             throw new Exception('something is wrong with database connection');
             die($e->getMessage());
@@ -29,11 +37,11 @@ class DB
     }
     public static function getIns(){
         if (!isset(self::$_dbIns)){
+            echo "IS instanciated";
             self::$_dbIns = new DB();
         }
         return self::$_dbIns;
     }
-    //    =======================================================================
     public function query($sql, $params = []){
         try {
             $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -48,11 +56,12 @@ class DB
             try {
                 $this->_pdo->beginTransaction();
                 if ($this->_query->execute()){
+                    $this->_affected_row = $this->_query->rowCount();
+                    $this->_inserted_id = $this->_pdo->lastInsertId();;
                     $this->_results = $this->_query;
                     if ($this->_pdo->commit()){
-                        $this->_inserted_id = $this->_pdo->lastInsertId();
+//                        $this->_inserted_id = $this->_pdo->
                     }
-
                 }
             } catch(PDOExecption $e) {
                 throw new Exception('Error on COMMIT');
@@ -63,8 +72,6 @@ class DB
                 throw new Exception('Error in ROLLBACK');
                 die($e->getMessage());
             }
-
-
         } catch( PDOExecption $e ) {
 
             throw new Exception('Errorwith PREPARING the query');
@@ -72,9 +79,10 @@ class DB
         }
         return true;
     }
-//    =======================================================================
 
-//-------------------------CREATE----------------------- OK exept returning the id
+
+    //==============================[ MAIN METHODS ]====================================
+    //-------------------------------CREATE----------------------- OK exept returning the id
     public function create($table, array $fields){
         $sql = "INSERT INTO `{$table}` (";
         $fieldKeys = array_keys($fields);
@@ -99,11 +107,10 @@ class DB
             $v++;
         }
         $sql .= ')';
-//        $fields = implode(', ', $fields);
-        echo $sql;
-//        print_r($fields);
         try{
             $this->query($sql, $fields );
+            echo "From the insert query: [<b>{$sql}</b>] The id: <b>{$this->lastInsertedRow()}</b>  of inserted row ";
+            return  $this->lastInsertedRow();
         } catch (PDOException $e){
             throw new Exception('The create query is not ok[ '.$sql.' ]');
             die($e->getMessage());
@@ -111,12 +118,11 @@ class DB
 //        print_r($this->results());
 //        echo  $this->lastInsertedRow();
     }
-    //---------------------SELECT---------------------------
+    //-------------------------------SELECT---------------------------
     public function select(array $fields = null,array $tables,array $conditiones = null, array $limit = null,array $groups = null,array $havings = null,array $order = null){
         if(!isset($fields)){
             $fields = ['*'];
         }
-
         if ($order != null){
             $order = $this->orderBy($order);
         }else {
@@ -133,27 +139,167 @@ class DB
             $groups = "";
         }
         if ($conditiones != null){
-            $conditiones = $this->parsingCondition($conditiones, $tables);
-        }
-        else {
+            $cond = $conditiones;
+            $ptbl = $tables;
+            $conditiones = $this->parsingCondition('select', $conditiones, $tables)[0];
+        }else {
             $conditiones  = '';
         }
         $fields = implode(', ', $fields);
         $sql    = "SELECT {$fields} ";
-        $tables = $this->selectedTables($tables);
-        $sql .= " ".$tables." ";
+        $sql .= "  FROM ".$this->parsingCondition('select', $cond, $ptbl)[1]." ";
         $sql   .= $conditiones.' ';
         $sql .= " ".$groups." ";
         $sql .= " ".$order." ";
         $sql .= ' '.$limit.' ';
-        echo "{$sql}";
+
+//        echo $this->parsingCondition('select', $cond, $ptbl)[1];
         try{
             $this->query($sql);
-//            return $this->results();
+            echo "From the query: [<b> {$sql} </b>] <b>{$this->affectedRows()}</b> rows are selected";
+            return $this->results();
         }catch (PDOException $e){
             throw new Exception('something is wrong with SELECT QUERY');
             die($e->getMessage());
+        }
+    }
+    //---------------------UPDATE---------------------------
+    public function update(array $tables, array $values, array $conditiones){
+        $sql = "UPDATE ";
+        $t = 1;
+        foreach ($tables as $table){
+            $sql .= " `".$table."` ";
+            if($t < count($tables)){
+                $sql .= ", ";
+            }
+            $t ++;
+        }
+        $sql .= ' SET';
+        $i = 1;
+        foreach ($values as  $key => $value){
+            $exValues = explode('.', $value);
+            if (is_integer($value)){
+                $sql .= " ".$key." = ". $value." ";
+            }else if (in_array($exValues[0], $tables)){
+                $sql .= " ".$key." = ". $value." ";
+            }else {
+                $sql .= " ".$key." = '". $value."' ";
+            }
+            if ($i < count($values)){
+                $sql .= ', ';
+            }
+            $i++;
+        }
+        $conditiones = $this->parsingCondition('update',$conditiones, $tables);
+        $sql .= $conditiones.' ';
+        try{
+            $this->query($sql);
+            echo"From the query[<b>{$sql}</b>] are <b>".$this->affectedRows().'</b> Affected Rows  ';
+            return $this->affectedRows();
+        } catch (PDOException $e){
+            throw new Exception('The UPDATE query is not ok [ '.$sql.' ]');
+            die($e->getMessage());
+        }
+    }
+    //---------------------DELETE---------------------------OK all
+    public function delete($table, array $conditions){
+        $cond = '';
+        $cond .= $this->parsingCondition('delete',$conditions);
 
+        $sql = "DELETE FROM `{$table}` WHERE ". $cond;
+        try{
+            $this->query($sql);
+            echo "<br>From the query: [<b>{$sql}</b>],  <b>".$this->affectedRows().'</b> Where deleted';
+            return $this->affectedRows();
+        } catch (PDOException $e){
+            throw new Exception('The DELETE query is not ok [ '.$sql.' ]');
+            die($e->getMessage());
+        }
+
+    }
+    //------------------------------------------------
+
+
+    //==============================[ Helpers ]========================================
+    private function parsingCondition($action, $arrays, array $table = []){
+        $tblJoins = ['ON', 'INNER JOIN', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FROM'];
+        $result = '';
+        $tbl = null;
+        if (count($table) > 1){
+//            $result .= "INNER JOIN";
+        }else if (count($table) == 1){
+            $result .= "WHERE ";
+        }
+        $reserved = ['=','>=','<=', '>', '<', '!='];
+        if($table == null) {
+            $table = ["FROM"];
+        }
+        foreach ($arrays as $key =>  $array){
+//            print_r($array);
+            if (in_array($array[0], $tblJoins)){
+                $tn = 1;
+                $new_table = [];
+                $arrayCond = $array[0]. ' (';
+                foreach ($table as $tbl){
+                    if ($tn == 1) {
+                        $new_table[] = $tbl;
+
+
+                    } else if (count($table) >= 3){
+                        $new_table[] = $arrayCond ;
+                        $new_table[] = $tbl;
+                        if ($tn < count($table)){
+                            $arrayCond = ', ';
+                        } else {
+                            $new_table[] = ' ) ';
+                        }
+                    }else {
+                        $new_table[] = $array[0];
+                        $new_table[] = $tbl;
+                    }
+
+                    $tn++;
+                }
+                $tbl = implode(' ', $new_table);
+//                $tbl .= $tbl. ' ON';
+            }else {
+                if(in_array($arrays[0][0], $tblJoins) ){
+                    $tbl .= ' ';
+
+                } else {
+                    $tbl  = $table[0];
+                }
+                if(is_string($key)){
+                    $result .= " {$key} ";
+                }
+                foreach ($array as $value){
+                    $valueArray = explode('.',$value);
+                    if (in_array($value, $reserved)){
+                        $result .= ' '.$value.' ';
+                    }else if (is_integer($value) ){
+                        $result .= " ".$value." " ;
+                    }else if($value == $array[0]){
+                        $result .= " ".$value." " ;
+                    } else if (in_array($valueArray[0], $table)){
+                        $result .= " ".$value." " ;
+                    } else{
+                        $result .= " '".$value."' " ;
+                    }
+                }
+            }
+        }
+        if($action === 'select'){
+
+
+            if (in_array($arrays[0][0], $tblJoins) &&  count($table) > 1){
+                $tbl .= ' ON';
+            }
+
+
+            return [$result, $tbl];
+
+        }else {
+            return $result;
         }
     }
     private function groupBy(array $groupes){
@@ -168,33 +314,6 @@ class DB
         }
         return $return;
     }
-    private function selectedTables(array $tables){
-        if (!empty($tables)){
-            $reserved = ['ON', 'INNER JOIN', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FROM'];
-            $result = " ";
-            $keysOfTables = array_keys($tables);
-            if (array_key_exists('FROM', $tables) or array_key_exists('from', $tables)){
-                $result .= "";
-                }else {
-                $result .= " FROM";
-
-            }
-            $arr = null;
-            $i = 1;
-            foreach ($tables as $key => $value){
-                $key = strtoupper($key);
-                if(in_array($key, $reserved )){
-                  $arr = array_search($key, $reserved);
-                    $result .= " {$reserved[$arr]} {$value} ";
-                } else {
-                    $result .= " {$value} ";
-                }
-            }
-            return $result;
-
-
-        }
-    }
     private function orderBy(array $order){
         $result = "ORDER BY ";
         $i = 1;
@@ -207,23 +326,11 @@ class DB
         }
         return $result;
     }
-    //---------------------UPDATE---------------------------
-    public function update(array $tables, array $values, array $conditiones){
 
-    }
-    //---------------------DELETE---------------------------OK all
-    public function delete($table, array $conditions){
-        $cond = '';
-        $cond .= $this->parsingCondition($conditions);
 
-        echo  $sql = "DELETE FROM `{$table}` WHERE ". $cond;
-        try{
-            $this->query($sql);
-        } catch (PDOException $e){
-            throw new Exception('The DELETE query is not ok [ '.$sql.' ]');
-            die($e->getMessage());
-        }
-
+    //==============================[ Geters ]=========================================
+    public function affectedRows(){
+        return $this->_affected_row;
     }
     public function lastInsertedRow(){
         return $this->_inserted_id;
@@ -234,34 +341,5 @@ class DB
     public function count(){
         return $this->_count;
     }
-    //------------------------------------------------
-    private function parsingCondition($arrays, array $table = []){
-        $reserved = ['=','>=','<=', '>', '<', '!='];
-        $result = '';
-
-        if($table == null) {
-            $table = [];
-        }
-        foreach ($arrays as $key =>  $array){
-            if(is_string($key)){
-                $result .= " {$key} ";
-            }
-            foreach ($array as $value){
-                $valueArray = explode('.',$value);
-                if (in_array($value, $reserved)){
-                    $result .= ' '.$value.' ';
-                }else if (is_integer($value) ){
-                    $result .= " ".$value." " ;
-                }else if($value == $array[0]){
-                    $result .= " ".$value." " ;
-                } else if (in_array($valueArray[0], $table)){
-                    $result .= " ".$value." " ;
-                } else{
-                    $result .= " '".$value."' " ;
-                }
-            }
-        }
-
-        return $result;
-    }
+    //================================================================================
 }
